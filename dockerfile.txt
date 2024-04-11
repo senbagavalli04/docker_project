@@ -1,14 +1,16 @@
-FROM python:3.7
-ENV PYTHOUNBUFFERED 1
-ADD ./ app
+# First stage: Install Python dependencies
+FROM python:3.7 AS builder
+ENV PYTHONBUFFERED 1
 WORKDIR /app
 COPY ./requirements.txt /app/requirements.txt
-RUN pip install -r requirements.txt
-CMD python app.py
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Second stage: Run Streamlit application
 FROM python:3.7
-ENV PYTHOUNBUFFERED 1
-ADD . /app
+ENV PYTHONBUFFERED 1
 WORKDIR /app
-COPY ./requirements.txt /app/requirements.txt
-RUN pip install -r requirements.txt
-CMD ["python3","-m","flask","run","--host-0.0.0.0"]
+COPY --from=builder /app /app  
+# Copy Python dependencies from the first stage
+EXPOSE 8501  
+# Streamlit default port
+CMD ["streamlit", "run", "--server.enableCORS=false", "app.py"]
