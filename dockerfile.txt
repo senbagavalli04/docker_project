@@ -1,34 +1,13 @@
-# FROM python:3.7
-# ENV PYTHUONBUFFERED 1
-# ADD ./ app
-# WORKDIR /app
-# COPY ./requirements.txt /app/requirements.txt
-# RUN pip install -r requirements.txt
-# CMD python app.py
-# FROM python:3.7
-# ENV PYTHUONBUFFERED 1
-# ADD . /app
-# WORKDIR /app
-# COPY ./requirements.txt /app/requirements.txt
-# RUN pip install -r requirements.txt
-# CMD  ["python", "-m", "streamlit", "run", "--host=0.0.0.0"]
+
 FROM python:3.7
 
-# Set environment variables
 ENV PYTHONBUFFERED 1
-
-# Copy the application code into the container
+WORKDIR /app
 ADD . /app
 
-# Set the working directory
-WORKDIR /app
-
-# Copy the requirements file and install dependencies
 COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
 
-# Expose port 8501 (default port for Streamlit)
 EXPOSE 8501
 
-# Set the command to run Streamlit with the specified host
 CMD ["streamlit", "run", "--server.enableCORS", "false", "--host=8501", "app.py"]
