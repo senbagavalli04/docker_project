@@ -2,12 +2,12 @@
 FROM python:3.7
 
 ENV PYTHONBUFFERED 1
-WORKDIR /app
 ADD . /app
+WORKDIR /app
 
 COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
 
 EXPOSE 8501
 
-CMD ["streamlit", "run", "--server.enableCORS", "false", "--host=8501", "app.py"]
+CMD ["streamlit", "run", "--server.enableCORS", "false", "--host", "app.py"]
